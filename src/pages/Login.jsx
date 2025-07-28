@@ -23,10 +23,10 @@ function Login() {
     formState: { errors },
   } = useForm({ 
     resolver: zodResolver(loginSchema),
-    defaultValues:{
-      emailId: "priyanshu@gmail.com",
-      password: "Rohit@9negi"
-    }
+    // defaultValues:{
+    //   emailId: "priyanshu@gmail.com",
+    //   password: "Priyanshu@123"
+    // }
   }); // Using renamed schema
 
   useEffect(() => {
