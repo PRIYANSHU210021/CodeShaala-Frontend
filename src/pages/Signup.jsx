@@ -27,7 +27,7 @@ function Signup() {
   }, [isAuthenticated, navigate]);
 
   const onSubmit = (data) => {
-    // dispatch(registerUser(data));
+    dispatch(registerUser(data));
     navigate('/login');
   };
 
