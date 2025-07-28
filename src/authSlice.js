@@ -14,11 +14,11 @@ export const registerUser = createAsyncThunk(
     } catch (error) {
       // Proper error handling
       console.error('Registration error:', error.response?.data || error.message);
-      
+
       // Return a serializable error message
       return rejectWithValue(
-        error.response?.data?.message || 
-        error.message || 
+        error.response?.data?.message ||
+        error.message ||
         'Registration failed'
       );
     }
@@ -31,6 +31,9 @@ export const loginUser = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await axiosClient.post('/user/login', credentials);
+      console.log("response", response)
+      const token = response.data.token;
+      localStorage.setItem("token", token);
       return response.data.user;
     } catch (error) {
       return rejectWithValue(error);
@@ -57,6 +60,7 @@ export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
+      localStorage.removeItem("token");
       await axiosClient.post('/user/logout');
       return null;
     } catch (error) {
@@ -64,6 +68,7 @@ export const logoutUser = createAsyncThunk(
     }
   }
 );
+
 
 const authSlice = createSlice({
   name: 'auth',
@@ -93,7 +98,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
       })
-  
+
       // Login User Cases
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
@@ -110,7 +115,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
       })
-  
+
       // Check Auth Cases
       .addCase(checkAuth.pending, (state) => {
         state.loading = true;
@@ -127,7 +132,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
       })
-  
+
       // Logout User Cases
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
